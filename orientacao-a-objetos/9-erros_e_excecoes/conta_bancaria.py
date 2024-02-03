@@ -26,17 +26,21 @@ def calcular_inss(valor):
     return valor_imposto
 
 def processar_salario():
+    global valor_na_conta
     valor_irpf = calcular_imposto_de_renda(salario_bruto)
     valor_inss = calcular_inss(salario_bruto)
-    valor_na_conta = valor_na_conta - valor_irpf - valor_inss
+    valor_na_conta = salario_bruto - valor_irpf - valor_inss
 
 def sacar_na_conta(valor):
+    global valor_na_conta
+    global salario_processado
+    
     if not salario_processado:
         imprimir_no_log(f'Processando o salario bruto antes de permitir o saque...', 'aviso')
         processar_salario()
         imprimir_no_log(f'O novo valor do salário na conta é {valor_na_conta}...', 'info')
 
-    if valor_na_conta <= valor:
+    if valor <= valor_na_conta:
         valor_na_conta -= valor
         imprimir_no_log(f'Sacando {valor}. O novo saldo na conta é de {valor_na_conta}.', 'info')
     else:
